@@ -1,0 +1,238 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #1a73e8;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5f6368;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+}
+
+.card {
+    display: none;
+}
+
+.card.active {
+    display: block;
+}
+
+.card h2 {
+    margin-bottom: 20px;
+    color: #202124;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 0.95em;
+    color: #5f6368;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.2s;
+    background: #fff;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+}
+
+.photo-upload-area {
+    position: relative;
+    overflow: hidden;
+    border: 2px dashed #dadce0;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.photo-upload-area:hover {
+    border-color: #1a73e8;
+}
+
+.photo-upload-area input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.photo-preview {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+}
+
+.photo-preview.hidden {
+    display: none;
+}
+
+.hint {
+    font-size: 0.8em;
+    color: #9aa0a6;
+    margin-top: 6px;
+}
+
+.btn {
+    display: inline-block;
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-primary {
+    background: #1a73e8;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #1557b0;
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-secondary {
+    background: #ea4335;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background: #d33e2c;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#messageArea {
+    margin-top: 16px;
+    min-height: 24px;
+}
+
+.success {
+    background: #e6f4ea;
+    color: #137333;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.error {
+    background: #fce8e6;
+    color: #c5221f;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+#collageGrid {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.photo-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 1;
+    background: #eee;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-date {
+    font-size: 0.75em;
+    color: #5f6368;
+    text-align: center;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.85);
+}
+
+#collageMessage {
+    margin-top: 16px;
+    min-height: 24px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.navbar .btn {
+    width: auto;
+    min-width: 160px;
+    padding: 10px 18px;
+}
+
+@media (max-width: 480px) {
+    .navbar .btn {
+        min-width: 120px;
+        padding: 8px 12px;
+    }
+
+    .container {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 1.3em;
+    }
+}
