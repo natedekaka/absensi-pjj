@@ -95,76 +95,52 @@ if (fotoInput) {
  * --------------------------------------------------------- */
 if (attendanceForm) {
     attendanceForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
+        e.preventDefault();
 
-    if (!compressedDataUrl) {
-        showMessage(messageArea, 'Silakan pilih foto terlebih dahulu.', 'error');
-        return;
-    }
-
-    const nis  = nisInput.value.trim();
-    const nama = namaInput.value.trim();
-
-    const payload = {
-        photo: compressedDataUrl,
-        nis: nis,
-        nama: nama,
-        kelas: kelasInput ? kelasInput.value.trim() : ''
-    };
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Menyimpan...';
-
-    try {
-        showMessage(messageArea, 'Mengirim data absensi...', 'success');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Menyimpan...';
-
-        const res = await fetch(APP_SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify(payload),
-            redirect: 'follow'
-        });
-
-        const raw = await res.text();
-        console.log('RAW RESPONSE:', raw.substring(0, 300));
-
-        const trimmed = raw.trim();
-        if (trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html') || trimmed.includes('<script')) {
-            console.error('HTML Response:', raw);
-            throw new Error('Server mengembalikan halaman HTML. Pastikan Apps Script di-deploy dengan setting "Execute as: Me" dan "Who has access: Anyone".');
+        if (!compressedDataUrl) {
+            showMessage(messageArea, 'Silakan pilih foto terlebih dahulu.', 'error');
+            return;
         }
 
-        let result;
+        const nis  = nisInput.value.trim();
+        const nama = namaInput.value.trim();
+
+        const payload = {
+            photo: compressedDataUrl,
+            nis: nis,
+            nama: nama,
+            kelas: kelasInput ? kelasInput.value.trim() : ''
+        };
+
         try {
-            result = JSON.parse(raw);
-        } catch (e) {
-            console.error('Gagal parse JSON:', raw.substring(0, 200));
-            throw new Error('Respons server tidak valid (bukan JSON).');
-        }
+            showMessage(messageArea, 'Mengirim data absensi...', 'success');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Menyimpan...';
 
-        console.log('Parsed Response:', result);
-        if (res.ok && result.ok) {
-            showMessage(messageArea, result.message || 'Absensi berhasil disimpan!', 'success');
+            await fetch(APP_SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                mode: 'no-cors',
+                redirect: 'follow'
+            });
+
+            showMessage(messageArea, 'Absensi berhasil dikirim! Mengalihkan ke halaman kolase...', 'success');
             attendanceForm.reset();
             compressedDataUrl = '';
-            preview.classList.add('hidden');
+            if (preview) preview.classList.add('hidden');
+
             setTimeout(function () {
                 window.location.href = 'kolase.html';
-            }, 1800);
-        } else {
-            showMessage(messageArea, result.message || 'Gagal menyimpan absensi.', 'error');
+            }, 1500);
+        } catch (err) {
+            console.error('Fetch error:', err);
+            showMessage(messageArea, 'Gagal terhubung ke server. Coba lagi nanti.', 'error');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Simpan Absensi';
         }
-    } catch (err) {
-        console.error('Fetch error:', err);
-        showMessage(messageArea, 'Gagal terhubung ke server (Error: ' + err.message + '). Coba lagi nanti.', 'error');
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Simpan Absensi';
-    }
-});
+    });
 }
-
 /* ---------------------------------------------------------
  * COLLAGE VIEWER (hanya ada di kolase.html)
  * --------------------------------------------------------- */
