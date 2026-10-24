@@ -31,7 +31,8 @@ const SPREADSHEET_ID = '1_ped9-VhlUKb6fTEXl8INa7Uf44wbV69h9cRzYoUY-A';        //
 
 function doPost(e) {
     // Tangani preflight CORS (browser HP sering kirim OPTIONS dulu)
-    if (e && e.parameter && e.parameter.method === 'OPTIONS') {
+    var isPreflight = (!e || !e.postData || e.postData.contents === '' || e.postData.contents === undefined);
+    if (isPreflight) {
         return ContentService.createTextOutput('')
             .setMimeType(ContentService.MimeType.TEXT_PLAIN)
             .setHeaders({
@@ -49,20 +50,20 @@ function doPost(e) {
         if (!data || !data.photo || !data.nis) {
             res.message = 'Data tidak lengkap: photo & NIS wajib diisi.';
             return ContentService.createTextOutput(JSON.stringify(res)).setMimeType(ContentService.MimeType.APPLICATION_JSON)
-        .setHeaders({
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type'
-        });
+                .setHeaders({
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Max-Age': '86400'
+                });
         }
 
         var nis    = String(data.nis).trim();
         var nama   = String(data.nama || '').trim();
         var kelas = String(data.kelas || '').trim();
         var photoB64 = String(data.photo);
-        // Bersihkan prefix data:image/jpeg;base64, jika ada
+        // Bersihkan prefix data:image/jpeg;base64,
         var cleanBase64 = photoB64.replace(/^data:image\/[^;]+;base64,/, '');
-
         // Decode base64 → bytes → Blob
         var byteChars = Utilities.base64Decode(cleanBase64);
         var blob = Utilities.newBlob(byteChars, 'image/jpeg');
@@ -90,7 +91,8 @@ function doPost(e) {
         .setHeaders({
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type'
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': '86400'
         });
 }
 
@@ -122,7 +124,8 @@ function doGet(e) {
             .setHeaders({
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type'
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Max-Age': '86400'
             });
     }
 
@@ -134,11 +137,12 @@ function doGet(e) {
         if (!nis) {
             res.message = 'NIS tidak ditemukan.';
             return ContentService.createTextOutput(JSON.stringify(res)).setMimeType(ContentService.MimeType.APPLICATION_JSON)
-        .setHeaders({
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type'
-        });
+                .setHeaders({
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Max-Age': '86400'
+                });
         }
 
         var sh = SpreadsheetApp.openById(SPREADSHEET_ID).getActiveSheet();
@@ -167,6 +171,7 @@ function doGet(e) {
         .setHeaders({
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type'
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': '86400'
         });
 }
