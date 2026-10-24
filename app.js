@@ -116,15 +116,36 @@ if (attendanceForm) {
     submitBtn.textContent = 'Menyimpan...';
 
     try {
+        showMessage(messageArea, 'Mengirim data absensi...', 'success');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Menyimpan...';
+
         const res = await fetch(APP_SCRIPT_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
-            mode: 'cors',
             redirect: 'follow'
         });
-        const result = await res.json();
 
+        const raw = await res.text();
+        console.log('RAW RESPONSE:', raw.substring(0, 300));
+
+        // Cek kalau server mengembalikan HTML (bukan JSON)
+        const trimmed = raw.trim();
+        if (trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html') || trimmed.includes('<script')) {
+            console.error('HTML Response:', raw);
+            throw new Error('Server mengembalikan halaman HTML. Pastikan Apps Script di-deploy dengan setting "Execute as: Me" dan "Who has access: Anyone".');
+        }
+
+        let result;
+        try {
+            result = JSON.parse(raw);
+        } catch (e) {
+            console.error('Gagal parse JSON:', raw.substring(0, 200));
+            throw new Error('Respons server tidak valid (bukan JSON). Coba lagi.');
+        }
+
+        console.log('Parsed Response:', result);
         if (res.ok && result.ok) {
             showMessage(messageArea, result.message || 'Absensi berhasil disimpan!', 'success');
             attendanceForm.reset();
@@ -138,8 +159,9 @@ if (attendanceForm) {
             showMessage(messageArea, result.message || 'Gagal menyimpan absensi.', 'error');
         }
     } catch (err) {
-        console.error(err);
-        showMessage(messageArea, 'Terjadi kesalahan koneksi. Coba lagi.', 'error');
+        console.error('Fetch error:', err);
+        // Tampilkan error yang lebih spesifik
+        showMessage(messageArea, 'Gagal terhubung ke server (Error: ' + err.message + '). Coba lagi nanti.', 'error');
     } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Simpan Absensi';
