@@ -122,7 +122,6 @@ if (attendanceForm) {
 
         const res = await fetch(APP_SCRIPT_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
             redirect: 'follow'
         });
@@ -130,7 +129,6 @@ if (attendanceForm) {
         const raw = await res.text();
         console.log('RAW RESPONSE:', raw.substring(0, 300));
 
-        // Cek kalau server mengembalikan HTML (bukan JSON)
         const trimmed = raw.trim();
         if (trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html') || trimmed.includes('<script')) {
             console.error('HTML Response:', raw);
@@ -142,7 +140,7 @@ if (attendanceForm) {
             result = JSON.parse(raw);
         } catch (e) {
             console.error('Gagal parse JSON:', raw.substring(0, 200));
-            throw new Error('Respons server tidak valid (bukan JSON). Coba lagi.');
+            throw new Error('Respons server tidak valid (bukan JSON).');
         }
 
         console.log('Parsed Response:', result);
@@ -151,7 +149,6 @@ if (attendanceForm) {
             attendanceForm.reset();
             compressedDataUrl = '';
             preview.classList.add('hidden');
-            // Auto-navigate to collage view
             setTimeout(function () {
                 window.location.href = 'kolase.html';
             }, 1800);
@@ -160,7 +157,6 @@ if (attendanceForm) {
         }
     } catch (err) {
         console.error('Fetch error:', err);
-        // Tampilkan error yang lebih spesifik
         showMessage(messageArea, 'Gagal terhubung ke server (Error: ' + err.message + '). Coba lagi nanti.', 'error');
     } finally {
         submitBtn.disabled = false;
