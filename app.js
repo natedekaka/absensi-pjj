@@ -47,9 +47,10 @@ if (fotoInput) {
         showMessage(messageArea, 'Silakan pilih file gambar (image).', 'error');
         return;
     }
-    // Validasi ukuran file (maksimal 5 MB)
-    if (file.size > 5 * 1024 * 1024) {
-        showMessage(messageArea, 'File terlalu besar. Maaf, ukuran file harus kurang dari 5 MB.', 'error');
+    // Validasi ukuran file (maksimal 10 MB — melarang pembatasan terlalu ketat agar
+    // foto HP berkualitas tinggi tidak di banned sebelum dikompresi)
+    if (file.size > 10 * 1024 * 1024) {
+        showMessage(messageArea, 'File terlalu besar. Maaf, ukuran file harus kurang dari 10 MB.', 'error');
         return;
     }
 
@@ -70,7 +71,15 @@ if (fotoInput) {
             canvas.width  = w;
             canvas.height = h;
             ctx.drawImage(img, 0, 0, w, h);
-            compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+
+            // Kompresi adaptif: mulai kualitas 0.8, turunkan jika masih > 300KB
+            let quality = 0.8;
+            let testUrl = '';
+            do {
+                testUrl = canvas.toDataURL('image/jpeg', quality);
+                quality -= 0.1;
+            } while (testUrl.length > 300 * 1024 && quality > 0.4);
+            compressedDataUrl = testUrl;
             preview.src   = compressedDataUrl;
             preview.classList.remove('hidden');
             hint.textContent = 'Gambar siap klik lagi jika ingin ganti';
