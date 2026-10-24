@@ -17,8 +17,13 @@
  */
 
 // --- KONFIGURASI (ganti dengan ID milik Anda) ---
-const FOLDER_ID      = 'your-drive-folder-id';   // Folder di Google Drive untuk foto
-const SPREADSHEET_ID = 'your-sheet-id';          // Sheet untuk data absensi
+// FOLDER_ID: bagian URL folder Drive di antara "/folders/" dan "?"
+// Contoh: https://drive.google.com/drive/folders/18OoFOTGYRWxKaMasqHRHQdp_EKOKqhSU?usp=sharing
+const FOLDER_ID      = '18OoFOTGYRWxKaMasqHRHQdp_EKOKqhSU';   // Folder di Google Drive untuk foto
+
+// SPREADSHEET_ID: bagian URL Sheet di antara "/d/" dan "/edit"
+// Contoh: https://docs.google.com/spreadsheets/d/1AbCdEfGhIjKlMnOpQrStUvWxYz123456789/edit
+const SPREADSHEET_ID = '1_ped9-VhlUKb6fTEXl8INa7Uf44wbV69h9cRzYoUY-A';        // Sheet untuk data absensi
 
 /* ---------------------------------------------------------
  *  HANDLER HTTP PUBLIK

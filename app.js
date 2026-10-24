@@ -11,7 +11,7 @@
  * Get the URL from the Google Apps Script "Deploy" dialog,
  * or by running: https://script.google.com/home/executions/...
  * --------------------------------------------------------- */
-const APP_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+const APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOLi-MPyFXrd87RCHL6cuAONuyNGyK_VGJ4Ll_b949OfQZFtYoLp4yGCdwZLVPG3tdfw/exec';
 
 /* ---------------------------------------------------------
  * DOM REFERENCES
