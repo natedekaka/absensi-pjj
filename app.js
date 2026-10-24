@@ -110,7 +110,9 @@ if (attendanceForm) {
         const res = await fetch(APP_SCRIPT_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
+            mode: 'cors',
+            redirect: 'follow'
         });
         const result = await res.json();
 
@@ -153,7 +155,11 @@ if (collageForm) {
     viewBtn.textContent = 'Membuka...';
 
     try {
-        const res = await fetch(`${APP_SCRIPT_URL}?nis=${encodeURIComponent(nis)}`);
+        const res = await fetch(`${APP_SCRIPT_URL}?nis=${encodeURIComponent(nis)}`, {
+            method: 'GET',
+            mode: 'cors',
+            redirect: 'follow'
+        });
         const result = await res.json();
 
         if (res.ok && result.ok) {
