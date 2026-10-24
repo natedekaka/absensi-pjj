@@ -158,11 +158,9 @@ if (collageForm) {
     viewBtn.textContent = 'Membuka...';
 
     try {
-        const res = await fetch(`${APP_SCRIPT_URL}?nis=${encodeURIComponent(nis)}`, {
-            method: 'GET',
-            mode: 'cors',
-            redirect: 'follow'
-        });
+        const targetUrl = `${APP_SCRIPT_URL}?nis=${encodeURIComponent(nis)}`;
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+        const res = await fetch(proxyUrl);
         const result = await res.json();
 
         if (res.ok && result.ok) {
@@ -224,7 +222,9 @@ if (exportBtn) {
     exportBtn.textContent = 'Mengekspor...';
 
     try {
-        const res = await fetch(`${APP_SCRIPT_URL}?action=export`);
+        const targetUrl = `${APP_SCRIPT_URL}?action=export`;
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+        const res = await fetch(proxyUrl);
         if (!res.ok) throw new Error('Export gagal');
 
         const csv = await res.text();
