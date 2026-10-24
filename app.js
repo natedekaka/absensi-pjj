@@ -117,11 +117,13 @@ if (attendanceForm) {
             submitBtn.disabled = true;
             submitBtn.textContent = 'Menyimpan...';
 
+            const formData = new FormData();
+            formData.append('data', JSON.stringify(payload));
+
             await fetch(APP_SCRIPT_URL, {
                 method: 'POST',
-                body: JSON.stringify(payload),
                 mode: 'no-cors',
-                redirect: 'follow'
+                body: formData
             });
 
             showMessage(messageArea, 'Absensi berhasil dikirim! Mengalihkan ke halaman kolase...', 'success');
