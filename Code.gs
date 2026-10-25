@@ -9,7 +9,7 @@ function doPost(e) {
   try {
     let rawData = '';
 
-    // Baca dari FormData (kirim pakai mode: no-cors)
+    // Baca dari URLSearchParams (kirim pakai mode: no-cors)
     if (e && e.parameter && e.parameter.data) {
       rawData = e.parameter.data;
     }
@@ -44,7 +44,8 @@ function doPost(e) {
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEWER);
     const fileUrl = file.getUrl();
 
-    const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getActiveSheet();
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheet = ss.getSheetByName('absensi-pjj') || ss.getSheets()[0];
     sheet.appendRow([new Date(), nis, nama, kelas, fileUrl]);
 
     return jsonResponse({ ok: true, message: "Absensi berhasil disimpan." });
@@ -59,7 +60,8 @@ function doGet(e) {
     const action = (params.action || '').toString().toLowerCase();
 
     if (action === 'export') {
-      const sh = SpreadsheetApp.openById(SPREADSHEET_ID).getActiveSheet();
+      const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+      const sh = ss.getSheetByName('absensi-pjj') || ss.getSheets()[0];
       const lastRow = sh.getLastRow();
       let csv = 'Timestamp,NIS,Nama Lengkap,Kelas,Photo URL\r\n';
 
@@ -87,7 +89,8 @@ function doGet(e) {
     const nis = (params.nis || '').toString().trim();
     if (!nis) return jsonResponse({ ok: false, message: "NIS tidak ditemukan.", photos: [] });
 
-    const sh = SpreadsheetApp.openById(SPREADSHEET_ID).getActiveSheet();
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ss.getSheetByName('absensi-pjj') || ss.getSheets()[0];
     const lastRow = sh.getLastRow();
     const photos = [];
 
