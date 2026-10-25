@@ -5,14 +5,43 @@
 const FOLDER_ID      = 'GANTI_DENGAN_ID_FOLDER_GOOGLE_DRIVE_ANDA';
 const SPREADSHEET_ID = 'GANTI_DENGAN_ID_SPREADSHEET_GOOGLE_SHEET_ANDA';
 
+function getActiveSheet(ss) {
+  let sh = ss.getSheetByName('absensi');
+  if (!sh || sh.getLastRow() === 0) {
+    // Sheet bernama 'absensi' kosong — coba Sheet1 kalau ada
+    sh = ss.getSheetByName('Sheet1');
+  }
+  if (!sh) {
+    sh = ss.getSheets()[0];
+  }
+  return sh;
+}
+
+function ensureHeader(sh) {
+  if (sh.getLastRow() === 0) {
+    sh.appendRow(['Timestamp', 'NIS', 'Nama Lengkap', 'Kelas', 'Photo URL']);
+  }
+}
+
+function appendRow(sh, row) {
+  sh.appendRow(row);
+  SpreadsheetApp.flush();
+}
+
 function doPost(e) {
   try {
     let rawData = '';
 
-    if (e && e.parameter && e.parameter.data) {
+    if (e && e.parameter && typeof e.parameter.data !== 'undefined') {
       rawData = e.parameter.data;
     } else if (e && e.postData && e.postData.contents) {
       rawData = e.postData.contents;
+      if (rawData.indexOf('data=') === 0) {
+        rawData = rawData.substring(5);
+        try {
+          rawData = decodeURIComponent(rawData.replace(/\+/g, ' '));
+        } catch (ex) {}
+      }
     }
 
     if (!rawData) {
@@ -35,24 +64,30 @@ function doPost(e) {
     const bytes = Utilities.base64Decode(photoB64);
     const blob  = Utilities.newBlob(bytes, 'image/jpeg', 'absensi_' + nis + '_' + Date.now() + '.jpg');
 
-    const folder = DriveApp.getFolderById(FOLDER_ID);
-    const file   = folder.createFile(blob);
-    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEWER);
-    const fileUrl = file.getUrl();
-
-    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    const sheet = ss.getSheets()[0];
-
-    if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['Timestamp', 'NIS', 'Nama Lengkap', 'Kelas', 'Photo URL']);
+    // ---- Simpan foto ke Drive ----
+    let fileUrl = '';
+    try {
+      const folder = DriveApp.getFolderById(FOLDER_ID);
+      const file   = folder.createFile(blob);
+      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEWER);
+      fileUrl = file.getUrl();
+    } catch (driveErr) {
+      return jsonResponse({ ok: false, message: "Gagal menyimpan foto ke Drive: " + driveErr.toString() });
     }
 
-    sheet.appendRow([new Date(), nis, nama, kelas, fileUrl]);
-    SpreadsheetApp.flush();
+    // ---- Simpan data ke Sheet ----
+    try {
+      const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+      const sh = getActiveSheet(ss);
+      ensureHeader(sh);
+      appendRow(sh, [new Date(), nis, nama, kelas, fileUrl]);
+    } catch (sheetErr) {
+      return jsonResponse({ ok: false, message: "Gagal menyimpan ke Sheet: " + sheetErr.toString() });
+    }
 
     return jsonResponse({ ok: true, message: "Absensi berhasil disimpan." });
   } catch (err) {
-    return jsonResponse({ ok: false, message: "Error: " + err.message });
+    return jsonResponse({ ok: false, message: "Error: " + err.toString() });
   }
 }
 
@@ -61,7 +96,7 @@ function doGet(e) {
     const params = e.parameter || {};
     const action = (params.action || '').toString().toLowerCase();
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    const sh = ss.getSheets()[0];
+    const sh = getActiveSheet(ss);
 
     if (sh.getLastRow() === 0) {
       sh.appendRow(['Timestamp', 'NIS', 'Nama Lengkap', 'Kelas', 'Photo URL']);
