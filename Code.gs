@@ -70,7 +70,12 @@ function doPost(e) {
     try {
       const folder = DriveApp.getFolderById(FOLDER_ID);
       const file   = folder.createFile(blob);
-      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      try {
+        file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      } catch (shareErr) {
+        // Jika gagal ubah sharing (akses ditolak), lanjutkan saja
+        console.log('Warning: gagal set sharing: ' + shareErr.toString());
+      }
       fileUrl = file.getUrl();
     } catch (driveErr) {
       return jsonResponse({ ok: false, message: "Gagal menyimpan foto ke Drive: " + driveErr.toString() });
