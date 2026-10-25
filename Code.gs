@@ -2,8 +2,8 @@
  * Absensi PJJ - Backend Google Apps Script
  */
 
-const FOLDER_ID      = 'GANTI_DENGAN_ID_FOLDER_GOOGLE_DRIVE_ANDA';
-const SPREADSHEET_ID = 'GANTI_DENGAN_ID_SPREADSHEET_GOOGLE_SHEET_ANDA';
+const FOLDER_ID      = '18OoFOTGYRWxKaMasqHRHQdp_EKOKqhSU';
+const SPREADSHEET_ID = '1p1Dy0XRSsy96V5JxmtjfxIAOiUVtOYY7T4jLMOdUoh0';
 
 function getActiveSheet(ss) {
   let sh = ss.getSheetByName('absensi');
