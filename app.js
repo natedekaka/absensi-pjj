@@ -138,7 +138,7 @@ if (attendanceForm) {
                 compressedDataUrl = '';
                 if (preview) preview.classList.add('hidden');
                 setTimeout(function () {
-                    window.location.href = 'kolase.html';
+                    window.location.href = 'index.html';
                 }, 1500);
                 return;
             }
