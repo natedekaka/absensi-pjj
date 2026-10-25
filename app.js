@@ -120,20 +120,55 @@ if (attendanceForm) {
             const body = new URLSearchParams();
             body.append('data', JSON.stringify(payload));
 
-            await fetch(APP_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: body
-            });
+            let res;
+            try {
+                res = await fetch(APP_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    body: body
+                });
+            } catch (corsErr) {
+                await fetch(APP_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: body
+                });
+                showMessage(messageArea, 'Absensi dikirim (tidak dapat membaca respons).', 'success');
+                attendanceForm.reset();
+                compressedDataUrl = '';
+                if (preview) preview.classList.add('hidden');
+                setTimeout(function () {
+                    window.location.href = 'kolase.html';
+                }, 1500);
+                return;
+            }
 
-            showMessage(messageArea, 'Absensi berhasil dikirim! Mengalihkan ke halaman kolase...', 'success');
-            attendanceForm.reset();
-            compressedDataUrl = '';
-            if (preview) preview.classList.add('hidden');
+            let result = null;
+            try {
+                result = await res.json();
+            } catch (e) {
+                try {
+                    const text = await res.text();
+                    showMessage(messageArea, 'Respons server tidak valid: ' + text.slice(0, 200), 'error');
+                } catch (e2) {
+                    showMessage(messageArea, 'Gagal membaca respons server.', 'error');
+                }
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Simpan Absensi';
+                return;
+            }
 
-            setTimeout(function () {
-                window.location.href = 'kolase.html';
-            }, 1500);
+            if (res.ok && result && result.ok) {
+                showMessage(messageArea, result.message || 'Absensi berhasil!', 'success');
+                attendanceForm.reset();
+                compressedDataUrl = '';
+                if (preview) preview.classList.add('hidden');
+                setTimeout(function () {
+                    window.location.href = 'kolase.html';
+                }, 1500);
+            } else {
+                showMessage(messageArea, (result && result.message) || 'Gagal menyimpan.', 'error');
+            }
         } catch (err) {
             console.error('Fetch error:', err);
             showMessage(messageArea, 'Gagal terhubung ke server. Coba lagi nanti.', 'error');
