@@ -11,7 +11,7 @@
  * Get the URL from the Google Apps Script "Deploy" dialog,
  * or by running: https://script.google.com/home/executions/...
  * --------------------------------------------------------- */
-const APP_SCRIPT_URL = 'GANTI_DENGAN_WEB_APP_URL_SCRIPT_GOOGLE_ANDA';
+const APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwi1gH1YYDycAVveoLjLqHFjOezFVkLo1FxTHdDF3FdUhxIbENK_Zzgia0GJ2oLAYYV5g/exec';
 
 /* ---------------------------------------------------------
  * DOM REFERENCES
