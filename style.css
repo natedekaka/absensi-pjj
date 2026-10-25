@@ -1,238 +1,193 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* ============================================
+   Absensi PJJ — Modern Mobile-First Design
+   ============================================ */
+:root {
+  --bg: linear-gradient(135deg, #e0f7fa 0%, #e8eaf6 100%);
+  --surface: #ffffff;
+  --primary: #00acc1;
+  --primary-deep: #006064;
+  --text: #212121;
+  --text-secondary: #5f6368;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --radius: 24px;
+  --radius-sm: 14px;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
 
 body {
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    background: #f0f2f5;
-    color: #333;
-    line-height: 1.6;
-    min-height: 100vh;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Glass-card */
 .container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-h1 {
-    text-align: center;
-    color: #1a73e8;
-    margin-bottom: 10px;
-}
-
-.subtitle {
-    text-align: center;
-    color: #5f6368;
-    font-size: 0.9em;
-    margin-bottom: 20px;
+  width: 100%;
+  max-width: 420px;
 }
 
 .card {
-    display: none;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px 28px;
+  animation: fadeUp 0.6s ease-out;
 }
 
-.card.active {
-    display: block;
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.card h2 {
-    margin-bottom: 20px;
-    color: #202124;
+.card h1 {
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-align: center;
+  margin-bottom: 6px;
+  color: var(--primary-deep);
+  line-height: 1.2;
 }
 
-.form-group {
-    margin-bottom: 16px;
+.subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  margin-bottom: 28px;
+  font-weight: 500;
 }
+
+/* Inputs */
+.form-group { margin-bottom: 20px; }
 
 .form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    font-size: 0.95em;
-    color: #5f6368;
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
-.form-group input[type="text"],
-.form-group input[type="number"] {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid #dadce0;
-    border-radius: 8px;
-    font-size: 15px;
-    transition: border-color 0.2s;
-    background: #fff;
+.form-group input[type="text"] {
+  width: 100%;
+  padding: 14px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-family: var(--font);
+  background: #fafafa;
+  color: var(--text);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  outline: none;
 }
 
-.form-group input:focus {
-    outline: none;
-    border-color: #1a73e8;
-    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+.form-group input[type="text"]:focus {
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0,172,193,0.15);
 }
 
+/* Photo upload */
 .photo-upload-area {
-    position: relative;
-    overflow: hidden;
-    border: 2px dashed #dadce0;
-    border-radius: 8px;
-    padding: 10px;
-    cursor: pointer;
-    transition: border-color 0.2s;
+  border: 2px dashed #cfd8dc;
+  border-radius: var(--radius-sm);
+  padding: 22px 14px;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s;
+  background: rgba(0,172,193,0.02);
 }
 
 .photo-upload-area:hover {
-    border-color: #1a73e8;
+  border-color: var(--primary);
+  background: rgba(0,172,193,0.06);
 }
 
 .photo-upload-area input[type="file"] {
-    position: absolute;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
+  display: block;
+  width: 100%;
+  font-family: var(--font);
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  cursor: pointer;
 }
 
 .photo-preview {
-    max-width: 100%;
-    max-height: 200px;
-    object-fit: cover;
-    border-radius: 6px;
-    display: block;
+  max-width: 100%;
+  max-height: 220px;
+  margin-top: 12px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-.photo-preview.hidden {
-    display: none;
-}
+.hidden { display: none; }
 
 .hint {
-    font-size: 0.8em;
-    color: #9aa0a6;
-    margin-top: 6px;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
+/* Button */
 .btn {
-    display: inline-block;
-    width: 100%;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.2s ease, background 0.2s ease;
+  letter-spacing: 0.01em;
+  user-select: none;
 }
 
 .btn-primary {
-    background: #1a73e8;
-    color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(0,172,193,0.3);
 }
 
 .btn-primary:hover {
-    background: #1557b0;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0,172,193,0.42);
 }
 
-.btn-primary:active {
-    transform: scale(0.98);
-}
+.btn-primary:active { transform: translateY(0); }
 
-.btn-secondary {
-    background: #ea4335;
-    color: #fff;
-}
-
-.btn-secondary:hover {
-    background: #d33e2c;
-}
-
-.btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
+/* Message area */
 #messageArea {
-    margin-top: 16px;
-    min-height: 24px;
+  margin-top: 18px;
+  min-height: 28px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-align: center;
 }
 
-.success {
-    background: #e6f4ea;
-    color: #137333;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-weight: 500;
-}
+#messageArea .success  { color: #2e7d32; }
+#messageArea .error    { color: #c62828; }
 
-.error {
-    background: #fce8e6;
-    color: #c5221f;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-weight: 500;
-}
-
-#collageGrid {
-    margin-top: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-}
-
-.photo-item {
-    position: relative;
-    border-radius: 8px;
-    overflow: hidden;
-    aspect-ratio: 1;
-    background: #eee;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-}
-
-.photo-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.photo-date {
-    font-size: 0.75em;
-    color: #5f6368;
-    text-align: center;
-    padding: 4px;
-    background: rgba(255, 255, 255, 0.85);
-}
-
-#collageMessage {
-    margin-top: 16px;
-    min-height: 24px;
-}
-
-.navbar {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 16px;
-}
-
-.navbar .btn {
-    width: auto;
-    min-width: 160px;
-    padding: 10px 18px;
-}
-
+/* Mobile adjustments */
 @media (max-width: 480px) {
-    .navbar .btn {
-        min-width: 120px;
-        padding: 8px 12px;
-    }
-
-    .container {
-        padding: 12px;
-    }
-
-    h1 {
-        font-size: 1.3em;
-    }
+  body { padding: 12px; }
+  .card { padding: 24px 20px; border-radius: 20px; }
+  h1 { font-size: 1.5rem; }
 }
