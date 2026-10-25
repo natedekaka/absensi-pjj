@@ -113,7 +113,7 @@ if (attendanceForm) {
         };
 
         try {
-            showMessage(messageArea, 'Mengirim data absensi...', 'success');
+            showMessage(messageArea, 'Absensi berhasil! Kamu tinggal di halaman absen.', 'success');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Menyimpan...';
 
@@ -163,9 +163,7 @@ if (attendanceForm) {
                 attendanceForm.reset();
                 compressedDataUrl = '';
                 if (preview) preview.classList.add('hidden');
-                setTimeout(function () {
-                    window.location.href = 'kolase.html';
-                }, 1500);
+                // Jangan redirect ke kolase, cukup tutup form
             } else {
                 showMessage(messageArea, (result && result.message) || 'Gagal menyimpan.', 'error');
             }
