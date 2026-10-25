@@ -113,7 +113,7 @@ if (attendanceForm) {
         };
 
         try {
-            showMessage(messageArea, 'Absensi berhasil! Kamu tinggal di halaman absen.', 'success');
+            showMessage(messageArea, result.message || 'Absensi berhasil!', 'success');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Menyimpan...';
 
@@ -138,7 +138,7 @@ if (attendanceForm) {
                 compressedDataUrl = '';
                 if (preview) preview.classList.add('hidden');
                 setTimeout(function () {
-                    window.location.href = 'index.html';
+                    window.location.href = 'selamat.html';
                 }, 1500);
                 return;
             }
@@ -163,7 +163,9 @@ if (attendanceForm) {
                 attendanceForm.reset();
                 compressedDataUrl = '';
                 if (preview) preview.classList.add('hidden');
-                // Jangan redirect ke kolase, cukup tutup form
+                setTimeout(function () {
+                    window.location.href = 'selamat.html';
+                }, 1200);
             } else {
                 showMessage(messageArea, (result && result.message) || 'Gagal menyimpan.', 'error');
             }
