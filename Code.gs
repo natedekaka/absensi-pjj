@@ -9,12 +9,9 @@ function doPost(e) {
   try {
     let rawData = '';
 
-    // Baca dari URLSearchParams (kirim pakai mode: no-cors)
     if (e && e.parameter && e.parameter.data) {
       rawData = e.parameter.data;
-    }
-    // Fallback kalau ada yang kirim JSON langsung
-    else if (e && e.postData && e.postData.contents) {
+    } else if (e && e.postData && e.postData.contents) {
       rawData = e.postData.contents;
     }
 
@@ -33,7 +30,6 @@ function doPost(e) {
     const kelas  = String(data.kelas || '').trim();
     let photoB64 = String(data.photo);
 
-    // Hapus prefix data:image/...;base64,
     photoB64 = photoB64.replace(/^data:image\/[^;]+;base64,/, '');
 
     const bytes = Utilities.base64Decode(photoB64);
@@ -45,8 +41,14 @@ function doPost(e) {
     const fileUrl = file.getUrl();
 
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    const sheet = ss.getSheetByName('absensi-pjj') || ss.getSheets()[0];
+    const sheet = ss.getSheets()[0];
+
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(['Timestamp', 'NIS', 'Nama Lengkap', 'Kelas', 'Photo URL']);
+    }
+
     sheet.appendRow([new Date(), nis, nama, kelas, fileUrl]);
+    SpreadsheetApp.flush();
 
     return jsonResponse({ ok: true, message: "Absensi berhasil disimpan." });
   } catch (err) {
@@ -58,10 +60,14 @@ function doGet(e) {
   try {
     const params = e.parameter || {};
     const action = (params.action || '').toString().toLowerCase();
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ss.getSheets()[0];
+
+    if (sh.getLastRow() === 0) {
+      sh.appendRow(['Timestamp', 'NIS', 'Nama Lengkap', 'Kelas', 'Photo URL']);
+    }
 
     if (action === 'export') {
-      const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-      const sh = ss.getSheetByName('absensi-pjj') || ss.getSheets()[0];
       const lastRow = sh.getLastRow();
       let csv = 'Timestamp,NIS,Nama Lengkap,Kelas,Photo URL\r\n';
 
@@ -89,8 +95,6 @@ function doGet(e) {
     const nis = (params.nis || '').toString().trim();
     if (!nis) return jsonResponse({ ok: false, message: "NIS tidak ditemukan.", photos: [] });
 
-    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    const sh = ss.getSheetByName('absensi-pjj') || ss.getSheets()[0];
     const lastRow = sh.getLastRow();
     const photos = [];
 
