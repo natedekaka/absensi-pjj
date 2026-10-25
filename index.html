@@ -1,46 +1,55 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi PJJ</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Absensi PJJ — SMA Negeri 6 Cimahi</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="card active">
-            <h1>Absensi PJJ</h1>
-            <h2>Mapel Informatika</h2>
-            <p class="subtitle">Isi form di bawah ini untuk melakukan absensi</p>
+  <main class="hero">
+    <div class="card">
+      <header class="card-header">
+        <img src="https://upload.wikimedia.org/wikipedia/id/c/c6/Logo_SMA_Negeri_6_CMH.png"
+             alt="Logo SMA Negeri 6 Cimahi"
+             class="logo"
+             loading="eager"
+             width="72" height="72" />
+        <h1>Absensi PJJ</h1>
+        <p class="subtitle">SMA Negeri 6 Cimahi &middot; Pembelajaran Jarak Jauh &middot; Mapel Informatika</p>
+      </header>
 
-            <form id="attendanceForm" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="nis">NIS (Nomor Induk Siswa)</label>
-                    <input type="text" id="nis" name="nis" placeholder="Misal: 00012345" required maxlength="12">
-                </div>
-                <div class="form-group">
-                    <label for="nama">Nama Lengkap</label>
-                    <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required>
-                </div>
-                <div class="form-group">
-                    <label for="kelas">Kelas</label>
-                    <input type="text" id="kelas" name="kelas" placeholder="Misal: X-1" required>
-                </div>
-                <div class="form-group">
-                    <label for="foto">Foto Diri</label>
-                    <div class="photo-upload-area">
-                        <input type="file" id="foto" name="foto" accept="image/*" capture="environment" required>
-                        <img id="preview" class="photo-preview hidden">
-                        <p class="hint" id="photoHint">Silahkan selfie menggunakan kamera ponsel anda</p>
-                    </div>
-                </div>
-
-                <button type="submit" id="submitBtn" class="btn btn-primary">Simpan Absensi</button>
-                <div id="messageArea"></div>
-            </form>
+      <form id="attendanceForm" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="nis">NIS (Kode Pengenal Siswa)</label>
+          <input type="text" id="nis" name="nis" placeholder="Misal: 00012345" required maxlength="12" autocomplete="off">
         </div>
-    </div>
 
-    <script src="app.js"></script>
+        <div class="form-group">
+          <label for="nama">Nama Lengkap</label>
+          <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label for="kelas">Kelas</label>
+          <input type="text" id="kelas" name="kelas" placeholder="Misal: X-1" required>
+        </div>
+
+        <div class="form-group">
+          <label for="foto">Foto Diri</label>
+          <div class="photo-upload-area">
+            <input type="file" id="foto" name="foto" accept="image/*" capture="environment" required>
+            <img id="preview" class="photo-preview hidden" alt="Preview foto">
+            <p class="hint" id="photoHint">Silahkan selfie menggunakan kamera ponsel anda</p>
+          </div>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn btn-primary">Simpan Absensi</button>
+        <div id="messageArea" aria-live="polite"></div>
+      </form>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
