@@ -196,7 +196,8 @@ if (collageForm) {
 
     try {
         const targetUrl = `${APP_SCRIPT_URL}?nis=${encodeURIComponent(nis)}`;
-        const res = await fetch(targetUrl, { method: 'GET', mode: 'cors' });
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+        const res = await fetch(proxyUrl);
         const result = await res.json();
 
         if (res.ok && result.ok) {
@@ -259,7 +260,8 @@ if (exportBtn) {
 
     try {
         const targetUrl = `${APP_SCRIPT_URL}?action=export`;
-        const res = await fetch(targetUrl, { method: 'GET', mode: 'cors' });
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+        const res = await fetch(proxyUrl);
         if (!res.ok) throw new Error('Export gagal');
 
         const csv = await res.text();
