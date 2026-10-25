@@ -113,7 +113,7 @@ if (attendanceForm) {
         };
 
         try {
-            showMessage(messageArea, result.message || 'Absensi berhasil!', 'success');
+            showMessage(messageArea, 'Mengirim data absensi...', 'success');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Menyimpan...';
 
