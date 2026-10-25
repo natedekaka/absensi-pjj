@@ -7,11 +7,12 @@ const SPREADSHEET_ID = '1p1Dy0XRSsy96V5JxmtjfxIAOiUVtOYY7T4jLMOdUoh0';
 
 function getActiveSheet(ss) {
   let sh = ss.getSheetByName('absensi');
-  if (!sh || sh.getLastRow() === 0) {
-    // Sheet bernama 'absensi' kosong — coba Sheet1 kalau ada
+  if (!sh) {
+    // Sheet bernama 'absensi' tidak ada — coba Sheet1 kalau ada
     sh = ss.getSheetByName('Sheet1');
   }
   if (!sh) {
+    // Jika tidak ada sheet pun, ambil sheet pertama
     sh = ss.getSheets()[0];
   }
   return sh;
